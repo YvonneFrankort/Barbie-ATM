@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `bank` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `bank`;
+CREATE DATABASE  IF NOT EXISTS `bank_13_3` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `bank_13_3`;
 -- MySQL dump 10.13  Distrib 8.0.31, for macos12 (x86_64)
 --
--- Host: 127.0.0.1    Database: bank
+-- Host: 127.0.0.1    Database: bank_13_3
 -- ------------------------------------------------------
 -- Server version	8.0.31
 
@@ -25,14 +25,12 @@ DROP TABLE IF EXISTS `account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account` (
-  `account_id` int NOT NULL,
-  `account_number` varchar(100) NOT NULL,
+  `account_id` int NOT NULL AUTO_INCREMENT,
   `customer_id` int NOT NULL,
-  `balance` float DEFAULT NULL,
-  `card_id` int DEFAULT NULL,
+  `balance` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `account_type` enum('debit','credit') NOT NULL DEFAULT 'debit',
+  `credit_limit` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`account_id`),
-  UNIQUE KEY `account_id_UNIQUE` (`account_id`),
-  UNIQUE KEY `account_number_UNIQUE` (`account_number`),
   KEY `customer_account_idx` (`customer_id`),
   CONSTRAINT `customer_account` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -48,32 +46,52 @@ LOCK TABLES `account` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `credit`
+-- Table structure for table `card`
 --
 
-DROP TABLE IF EXISTS `credit`;
+DROP TABLE IF EXISTS `card`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `credit` (
-  `credit_id` int NOT NULL,
-  `pincode` varchar(255) NOT NULL,
-  `credit_limit` decimal(10,2) NOT NULL,
-  `account_id` int NOT NULL,
-  `card_number` varchar(40) NOT NULL,
-  PRIMARY KEY (`credit_id`),
-  UNIQUE KEY `credit_id_UNIQUE` (`credit_id`),
-  KEY `account_credit_idx` (`account_id`),
-  CONSTRAINT `account_credit` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+CREATE TABLE `card` (
+  `card_id` int NOT NULL AUTO_INCREMENT,
+  `pin_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `credit`
+-- Dumping data for table `card`
 --
 
-LOCK TABLES `credit` WRITE;
-/*!40000 ALTER TABLE `credit` DISABLE KEYS */;
-/*!40000 ALTER TABLE `credit` ENABLE KEYS */;
+LOCK TABLES `card` WRITE;
+/*!40000 ALTER TABLE `card` DISABLE KEYS */;
+/*!40000 ALTER TABLE `card` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cardaccount`
+--
+
+DROP TABLE IF EXISTS `cardaccount`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cardaccount` (
+  `card_id` int NOT NULL,
+  `account_id` int NOT NULL,
+  PRIMARY KEY (`card_id`,`account_id`),
+  KEY `account_cardaccount_idx` (`account_id`),
+  CONSTRAINT `account_cardaccount` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `card_cardaccount` FOREIGN KEY (`card_id`) REFERENCES `card` (`card_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cardaccount`
+--
+
+LOCK TABLES `cardaccount` WRITE;
+/*!40000 ALTER TABLE `cardaccount` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cardaccount` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -84,13 +102,10 @@ DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customer` (
-  `customer_id` int NOT NULL,
-  `phone` varchar(20) NOT NULL,
-  `ssn` varchar(20) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  PRIMARY KEY (`customer_id`),
-  UNIQUE KEY `customer_id_UNIQUE` (`customer_id`),
-  UNIQUE KEY `henkilotunnus_UNIQUE` (`ssn`)
+  `customer_id` int NOT NULL AUTO_INCREMENT,
+  `firstname` varchar(50) NOT NULL,
+  `secondname` varchar(50) NOT NULL,
+  PRIMARY KEY (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -104,30 +119,37 @@ LOCK TABLES `customer` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `debit`
+-- Table structure for table `transaction`
 --
 
-DROP TABLE IF EXISTS `debit`;
+DROP TABLE IF EXISTS `transaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `debit` (
-  `debit_id` int NOT NULL,
+CREATE TABLE `transaction` (
+  `transaction_id` int NOT NULL,
   `account_id` int NOT NULL,
-  `card_number` varchar(40) NOT NULL,
-  `pincode` varchar(255) NOT NULL,
-  PRIMARY KEY (`debit_id`),
-  KEY `account_debit` (`account_id`),
-  CONSTRAINT `account_debit` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+  `card_id` int NOT NULL,
+  `date` datetime NOT NULL,
+  `transaction_type` enum('withdraw','deposit') NOT NULL,
+  `summa` decimal(10,2) NOT NULL,
+  `customer_id` int NOT NULL,
+  PRIMARY KEY (`transaction_id`,`customer_id`),
+  KEY `customer_transaction_idx` (`customer_id`),
+  KEY `account_transaction_idx` (`account_id`),
+  KEY `card_transaction_idx` (`card_id`),
+  CONSTRAINT `account_transaction` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `card_transaction` FOREIGN KEY (`card_id`) REFERENCES `card` (`card_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `customer_transaction` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `debit`
+-- Dumping data for table `transaction`
 --
 
-LOCK TABLES `debit` WRITE;
-/*!40000 ALTER TABLE `debit` DISABLE KEYS */;
-/*!40000 ALTER TABLE `debit` ENABLE KEYS */;
+LOCK TABLES `transaction` WRITE;
+/*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
+/*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -139,4 +161,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-12 17:41:18
+-- Dump completed on 2025-03-13 18:57:46
