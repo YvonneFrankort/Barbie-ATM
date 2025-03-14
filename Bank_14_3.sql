@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `bank_13_3` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `bank_13_3`;
 -- MySQL dump 10.13  Distrib 8.0.31, for macos12 (x86_64)
 --
 -- Host: 127.0.0.1    Database: bank_13_3
@@ -55,7 +53,11 @@ DROP TABLE IF EXISTS `card`;
 CREATE TABLE `card` (
   `card_id` int NOT NULL AUTO_INCREMENT,
   `pin_code` varchar(255) NOT NULL,
-  PRIMARY KEY (`card_id`)
+  `customer_id` int NOT NULL,
+  `rfid_code` varchar(30) NOT NULL,
+  PRIMARY KEY (`card_id`),
+  KEY `customer_card_idx` (`customer_id`),
+  CONSTRAINT `customer_card` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -134,12 +136,8 @@ CREATE TABLE `transaction` (
   `summa` decimal(10,2) NOT NULL,
   `customer_id` int NOT NULL,
   PRIMARY KEY (`transaction_id`,`customer_id`),
-  KEY `customer_transaction_idx` (`customer_id`),
   KEY `account_transaction_idx` (`account_id`),
-  KEY `card_transaction_idx` (`card_id`),
-  CONSTRAINT `account_transaction` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `card_transaction` FOREIGN KEY (`card_id`) REFERENCES `card` (`card_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `customer_transaction` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT `account_transaction` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -161,4 +159,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-13 18:57:46
+-- Dump completed on 2025-03-14 13:55:50
