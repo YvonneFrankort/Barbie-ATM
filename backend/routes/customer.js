@@ -26,4 +26,37 @@ customer.getById(request.params.id,function(err,result){
     });
 });
 
+//add a new customer
+router.post('/', function (reqest, response) {
+    customer.add(req.body, function (err, result) {
+        if (err) {
+            res.status(500).json(err);
+        } else {
+            res.status(201).json({ message: "Customer added!", customer_id: result.insertId });
+        }
+    });
+});
+
+// update customer by ID
+router.put('/:id', function (reqest, response) {
+    customer.update(req.params.id, req.body, function (err, result) {
+        if (err) {
+            res.status(500).json(err);
+        } else {
+            res.json({ message: "Customer updated!" });
+        }
+    });
+});
+
+// delete a customer
+router.delete('/:id', function (reqest, response) {
+    customer.delete(req.params.id, function (err, result) {
+        if (err) {
+            res.status(500).json(err);
+        } else {
+            res.json({ message: "Customer deleted!" });
+        }
+    });
+});
+
 module.exports=router;
