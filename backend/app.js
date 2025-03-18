@@ -8,7 +8,7 @@ var customerRouter = require('./routes/customer');
 var accountRouter = require('./routes/account');
 var cardaccountRouter = require('./routes/cardaccount');
 var cardRouter = require('./routes/card');
-var transactionRouter = require('.routes/transaction');
+var transactionRouter = require('./routes/transaction');
 
 var app = express();
 
