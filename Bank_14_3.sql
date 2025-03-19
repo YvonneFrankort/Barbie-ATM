@@ -1,8 +1,6 @@
-CREATE DATABASE  IF NOT EXISTS `bank_13_3` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `bank_13_3`;
 -- MySQL dump 10.13  Distrib 8.0.31, for macos12 (x86_64)
 --
--- Host: 127.0.0.1    Database: bank_13_3
+-- Host: 127.0.0.1    Database: bank_14_3
 -- ------------------------------------------------------
 -- Server version	8.0.31
 
@@ -16,6 +14,7 @@ USE `bank_13_3`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
 
 --
 -- Table structure for table `account`
@@ -33,7 +32,7 @@ CREATE TABLE `account` (
   PRIMARY KEY (`account_id`),
   KEY `customer_account_idx` (`customer_id`),
   CONSTRAINT `customer_account` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +41,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
+INSERT INTO `account` VALUES (1,1,1000.00,'credit',300.00),(2,1,100.00,'credit',NULL),(3,2,3000.00,'credit',500.00),(4,2,200.00,'credit',30.00),(5,3,100.00,'credit',125.00),(6,3,10000.00,'debit',NULL);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -55,8 +55,12 @@ DROP TABLE IF EXISTS `card`;
 CREATE TABLE `card` (
   `card_id` int NOT NULL AUTO_INCREMENT,
   `pin_code` varchar(255) NOT NULL,
-  PRIMARY KEY (`card_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `customer_id` int NOT NULL,
+  `rfid_code` varchar(30) NOT NULL,
+  PRIMARY KEY (`card_id`),
+  KEY `customer_card_idx` (`customer_id`),
+  CONSTRAINT `customer_card` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,6 +69,7 @@ CREATE TABLE `card` (
 
 LOCK TABLES `card` WRITE;
 /*!40000 ALTER TABLE `card` DISABLE KEYS */;
+INSERT INTO `card` VALUES (1,'1234',1,'1234'),(2,'2222',1,'0000'),(3,'3333',2,'3333'),(4,'4444',2,'4444'),(5,'5555',3,'5555'),(6,'6666',3,'3333');
 /*!40000 ALTER TABLE `card` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,6 +96,7 @@ CREATE TABLE `cardaccount` (
 
 LOCK TABLES `cardaccount` WRITE;
 /*!40000 ALTER TABLE `cardaccount` DISABLE KEYS */;
+INSERT INTO `cardaccount` VALUES (1,1),(2,2),(3,3),(3,4);
 /*!40000 ALTER TABLE `cardaccount` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -106,7 +112,7 @@ CREATE TABLE `customer` (
   `firstname` varchar(50) NOT NULL,
   `secondname` varchar(50) NOT NULL,
   PRIMARY KEY (`customer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -115,6 +121,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
+INSERT INTO `customer` VALUES (1,'Pilar','Murcia'),(2,'Juan','Pepinero'),(3,'Kermit','Suicidal'),(4,'Kermit','NotSuicidal'),(5,'Juha','Lepistö'),(6,'Ana','De Arco'),(7,'Petra','Judas');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -126,7 +133,7 @@ DROP TABLE IF EXISTS `transaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transaction` (
-  `transaction_id` int NOT NULL,
+  `transaction_id` int NOT NULL AUTO_INCREMENT,
   `account_id` int NOT NULL,
   `card_id` int NOT NULL,
   `date` datetime NOT NULL,
@@ -134,13 +141,9 @@ CREATE TABLE `transaction` (
   `summa` decimal(10,2) NOT NULL,
   `customer_id` int NOT NULL,
   PRIMARY KEY (`transaction_id`,`customer_id`),
-  KEY `customer_transaction_idx` (`customer_id`),
   KEY `account_transaction_idx` (`account_id`),
-  KEY `card_transaction_idx` (`card_id`),
-  CONSTRAINT `account_transaction` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `card_transaction` FOREIGN KEY (`card_id`) REFERENCES `card` (`card_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `customer_transaction` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  CONSTRAINT `account_transaction` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -149,6 +152,7 @@ CREATE TABLE `transaction` (
 
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
+INSERT INTO `transaction` VALUES (1,1,1,'2025-03-14 15:30:00','deposit',100.00,1),(2,1,1,'2025-03-14 13:31:11','deposit',111.11,1);
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -161,4 +165,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-13 18:57:46
+-- Dump completed on 2025-03-16 19:08:47
