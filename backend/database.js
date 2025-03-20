@@ -1,3 +1,17 @@
+//<<<<<<< meri
+const mysql=require('mysql2');
+const ConnectionString= 'mysql://bankuser:bankpass@127.0.0.1:3306/bank';
+const connection=mysql.createPool(ConnectionString);
+
+module.exports=connection;
+
+/*
+LUODAAN TUNNUS JA ANNETAAN OIKEUDET WORKBENCHISSA
+CREATE USER bankuser@localhost IDENTIFIED BY 'bankpass';
+GRANT ALL ON bank.* TO bankuser@localhost;
+
+*/
+//=======
 const mysql = require("mysql2");
 // const dotenv = require("dotenv");
 // dotenv.config(); // Load environment variables from .env file
@@ -21,3 +35,4 @@ connection.connect((err) => {
 });
 
 module.exports = connection;
+//>>>>>>> main

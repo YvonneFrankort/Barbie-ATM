@@ -7,12 +7,16 @@ var logger = require('morgan');
 
 // Import routes
 var indexRouter = require('./routes/index');
+//<<<<<<< meri
+var customerRouter = require('./routes/customer');
+// =======
 var usersRouter = require('./routes/users');
 var accountRouter = require('./routes/accountRoutes'); // router for bank-related API
 var customerRouter = require('./routes/customerRoutes'); // router for customer-related API
 var cardRouter = require('./routes/cardRoutes'); // router for card-related API
 var transactionRouter = require('./routes/transactionRoutes'); // router for transaction-related API
 var cardaccountRouter = require('./routes/cardaccountRoutes'); // router for cardaccount-related API
+//>>>>>>> main
 
 var app = express();
 
@@ -25,6 +29,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/', indexRouter);
+//<<<<<<< meri
+app.use('/customer', customerRouter);
+//=======
 app.use('/users', usersRouter);
 app.use('/accounts', accountRouter); // New route for banking operations
 app.use('/customers', customerRouter); // New route for customer operations
@@ -36,5 +43,6 @@ var port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);;
 });
+//>>>>>>> main
 
 module.exports = app;
