@@ -1,3 +1,4 @@
+
 const mysql = require("mysql2");
 
 const connection = mysql.createPool({
@@ -20,3 +21,10 @@ connection.getConnection((err, conn) => {
     }
 });
 module.exports = connection; 
+
+/*
+LUODAAN TUNNUS JA ANNETAAN OIKEUDET WORKBENCHISSA
+CREATE USER bankuser@localhost IDENTIFIED BY 'bankpass';
+GRANT ALL ON bank.* TO bankuser@localhost;
+*/
+
