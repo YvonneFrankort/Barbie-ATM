@@ -1,62 +1,67 @@
-const express=require('express');
-const router=express.Router();
-const customer=require('../models/customer_model');
+const express = require('express');
+const router = express.Router();
+const customer = require('../models/customer_model');
 
-//get all customers
-router.get('/',function(request,response){
-    customer.getAll(function(err,result){
-        if(err){
-            response.json(err);
-        }
-        else{
+// Get all customers
+router.get('/', function (request, response) {
+    customer.getAll(function (err, result) {
+        if (err) {
+            response.status(500).json({ error: err.message });
+        } else {
             response.json(result);
         }
     });
 });
 
-//get customer by id
-router.get('/:id',function(request,response){
-customer.getById(request.params.id,function(err,result){
-        if(err){
-        response.json(err);
-        }
-        else{
-        response.json(result[0]);
-        }
-    });
-});
-
-//add a new customer
-router.post('/', function (reqest, response) {
-    customer.add(req.body, function (err, result) {
+// Get customer by ID
+router.get('/:id', function (request, response) {
+    customer.getById(request.params.id, function (err, result) {
         if (err) {
-            res.status(500).json(err);
+            response.status(500).json({ error: err.message });
+        } else if (result.length > 0) {
+            response.json(result[0]); // Return first customer
         } else {
-            res.status(201).json({ message: "Customer added!", customer_id: result.insertId });
+            response.status(404).json({ message: "Customer not found" });
         }
     });
 });
 
-// update customer by ID
-router.put('/:id', function (reqest, response) {
-    customer.update(req.params.id, req.body, function (err, result) {
+// Add a new customer
+router.post('/', function (request, response) {
+    customer.add(request.body, function (err, result) {
         if (err) {
-            res.status(500).json(err);
+            response.status(500).json({ error: err.message });
         } else {
-            res.json({ message: "Customer updated!" });
+            response.status(201).json({ message: "Customer added!", customer_id: result.insertId });
         }
     });
 });
 
-// delete a customer
-router.delete('/:id', function (reqest, response) {
-    customer.delete(req.params.id, function (err, result) {
+// Update customer by ID
+router.put('/:id', function (request, response) {
+    customer.update(request.params.id, request.body, function (err, result) {
         if (err) {
-            res.status(500).json(err);
+            response.status(500).json({ error: err.message });
+        } else if (result.affectedRows > 0) {
+            response.json({ message: "Customer updated!" });
         } else {
-            res.json({ message: "Customer deleted!" });
+            response.status(404).json({ message: "Customer not found or no changes made" });
         }
     });
 });
 
-module.exports=router;
+// Delete a customer
+router.delete('/:id', function (request, response) {
+    customer.delete(request.params.id, function (err, result) {
+        if (err) {
+            response.status(500).json({ error: err.message });
+        } else if (result.affectedRows > 0) {
+            response.json({ message: "Customer deleted!" });
+        } else {
+            response.status(404).json({ message: "Customer not found" });
+        }
+    });
+});
+
+module.exports = router;
+
