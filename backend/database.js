@@ -1,38 +1,30 @@
-//<<<<<<< meri
-const mysql=require('mysql2');
-const ConnectionString= 'mysql://bankuser:bankpass@127.0.0.1:3306/bank';
-const connection=mysql.createPool(ConnectionString);
 
-module.exports=connection;
+const mysql = require("mysql2");
+
+const connection = mysql.createPool({
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'Treis56253',
+    database: process.env.DB_NAME || 'bank_14_3',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
+// Connect to the database
+connection.getConnection((err, conn) => {
+    if (err) {
+        console.error("Error connecting to the database:", err);
+    } else {
+        console.log("Connected to the database");
+        conn.release(); // Release the connection back to the pool
+    }
+});
+module.exports = connection; 
 
 /*
 LUODAAN TUNNUS JA ANNETAAN OIKEUDET WORKBENCHISSA
 CREATE USER bankuser@localhost IDENTIFIED BY 'bankpass';
 GRANT ALL ON bank.* TO bankuser@localhost;
-
 */
-//=======
-const mysql = require("mysql2");
-// const dotenv = require("dotenv");
-// dotenv.config(); // Load environment variables from .env file
 
-// Create MySQL connection
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'Pimitefr123!',
-    database: 'bank_14_3'
-});
-
-// Connect to the database
-connection.connect((err) => {
-    if(err){
-        console.error("Error connecting to the database: ", err);
-    }
-    else{
-        console.log("Connected to the database");
-    }
-});
-
-module.exports = connection;
-//>>>>>>> main
