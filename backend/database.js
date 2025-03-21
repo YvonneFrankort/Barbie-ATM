@@ -1,3 +1,9 @@
+// const mysql = require('mysql2');
+// const ConnectionString = 'mysql://root:Pimitefr123!@localhost:3306/bank_14_3';
+        // msql://username:password@host:port/database
+// const connection = mysql.createPool(ConnectionString);
+// module.exports = connection;
+
 const mysql = require("mysql2");
 // const dotenv = require("dotenv");
 // dotenv.config(); // Load environment variables from .env file
@@ -21,3 +27,8 @@ connection.connect((err) => {
 });
 
 module.exports = connection;
+
+/* Create a user with rights 
+CREATE USER bankuser@localhost identified by 'bankpass'
+GRANT ALL ON bank_14_3.* TO bankuser@localohst;
+ */ 

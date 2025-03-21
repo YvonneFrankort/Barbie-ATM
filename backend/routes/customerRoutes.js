@@ -1,7 +1,48 @@
 const express = require('express');
 const router = express.Router();
 const database = require('../database'); // Database connection
+const customer = require('../models/customer_model');
 
+router.get('/', function(request, response){
+    customer.getAll(function(error, result){
+        if(error){
+            response.json(error);
+        }
+        else{
+            response.json(result); // returns json array
+        }
+    })
+});
+
+router.get('/:id', function(request, response){
+    customer.getById(request.params.id, function(error, result){
+        if(error){
+            response.json(error);
+        }
+        else{
+            response.json(result[0]); // palauta json object
+        }
+    })
+});
+
+router.post('/', function(request, response){
+    customer.add(request.body, function(error, result){
+        if(error){
+            console.log("Error in customer.add: ", error);
+            response.json(error);
+        }
+        else{
+            console.log("Result in customer.add: ", result);
+            response.json
+            ({
+                message: "Custommer added succesfully",
+                affectedRows: result.affectedRows
+            }); // returns number of affected rows
+        }
+    })
+});
+
+/*
 // GET all customers
 router.get('/', (req, res) => {
     database.query('SELECT * FROM customer', (err, results) => {
@@ -34,7 +75,7 @@ router.post('/', (req, res) => {
             res.status(201).json({message: "Customer created successfully", customer_id: result.insertId});
         });
 });
-
+*/
 // PUT (update) a customer
 router.put('/:id', (req, res) => {
     const {id} = req.params;
