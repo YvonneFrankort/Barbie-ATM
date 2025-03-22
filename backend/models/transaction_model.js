@@ -8,12 +8,22 @@ const transaction = {
 
     // Get transaction by ID
     getById(id, callback) {
-        return db.query('SELECT * FROM transaction WHERE transaction_id = ?', [id], callback);
+        return db.query(
+            'SELECT * FROM transaction WHERE transaction_id = ?', 
+            [id], 
+            function (err, result) {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    callback(null, result); 
+                }
+            }
+        );
     },
 
     // Add a new transaction (auto-sets date)
     add(newTransaction, callback) {
-        return db.query(
+        db.query(
             `INSERT INTO transaction (account_id, card_id, transaction_type, summa, customer_id, date)
              VALUES (?, ?, ?, ?, ?, NOW())`,  // NOW() automatically sets the date
             [newTransaction.account_id, newTransaction.card_id, newTransaction.transaction_type, newTransaction.summa, newTransaction.customer_id],
@@ -21,9 +31,9 @@ const transaction = {
         );
     },
 
-    // Update transaction by ID
+    // Update an existing transaction
     update(id, updatedTransaction, callback) {
-        return db.query(
+        db.query(
             `UPDATE transaction 
              SET account_id = ?, card_id = ?, transaction_type = ?, summa = ?, customer_id = ?
              WHERE transaction_id = ?`,
@@ -34,9 +44,8 @@ const transaction = {
 
     // Delete transaction by ID
     delete(id, callback) {
-        return db.query('DELETE FROM transaction WHERE transaction_id = ?', [id], callback);
+        db.query('DELETE FROM transaction WHERE transaction_id = ?', [id], callback);
     }
 };
 
 module.exports = transaction;
-
