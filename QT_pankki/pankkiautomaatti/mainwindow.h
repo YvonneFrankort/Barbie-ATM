@@ -23,7 +23,8 @@ private slots:
     void handleCardButton();
     void handlePinButton();
     void handleCardNum(QString);
-     void handlePinNum(QString);
+    void handlePinNum(QString);
+    void handlePinuiTimeOut();
 
 private:
     Ui::MainWindow *ui;

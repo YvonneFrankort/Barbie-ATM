@@ -48,10 +48,12 @@ void MainWindow::handlePinButton()
     pinui = new PinUi(this); // muista alustaa pointteri
     connect(pinui,&PinUi::sendPinNum,
             this,&MainWindow::handlePinNum);
+    connect(pinui,&PinUi::PinuiTimeOut,
+            this, &MainWindow::handlePinuiTimeOut);
 
     qDebug() <<"Pin Button is pressed";
     pinui->open();
-     qDebug()<<"aukesiko pinui";
+     qDebug()<<"aukesiko pinui"; //tehään kaikesta DYNAAMINEN (alustus -> destruktori -> CONNECT MUISTA CONNECT9
 }
 
 void MainWindow::handleCardNum(QString s)
@@ -66,6 +68,13 @@ void MainWindow::handlePinNum(QString s)
 {
     qDebug()<<"Vastaanotettiin pin numero";
     ui->pinNum->setText(s);
+    pinui->close();
+    delete pinui;
+}
+
+void MainWindow::handlePinuiTimeOut()
+{
+    qDebug()<<"Vastaanotettiin pinUI TIMEOUT ";
     pinui->close();
     delete pinui;
 }
