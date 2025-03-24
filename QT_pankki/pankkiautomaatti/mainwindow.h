@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "reader.h"
+#include "pinui.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,9 +22,14 @@ public:
 private slots:
     void handleCardButton();
     void handlePinButton();
+    void handleCardNum(QString);
+     void handlePinNum(QString);
 
 private:
     Ui::MainWindow *ui;
     Reader * reader;
+    PinUi*pinui;
+
+
 };
 #endif // MAINWINDOW_H

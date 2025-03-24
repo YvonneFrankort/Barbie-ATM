@@ -15,20 +15,57 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pin, &QPushButton::clicked,
             this, &MainWindow::handlePinButton);
 
-    reader = new Reader(this);
+
+
+
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete reader;
 }
 
 void MainWindow::handleCardButton()
 {
+    reader = new Reader(this);
+    connect(reader,&Reader::sendCardNum,
+            this,&MainWindow::handleCardNum);
+    //sitte kun RFID muuta osoite
+
     qDebug() <<"Card Button is pressed";
+    //show() mahdollistaa ohjelman suorittamisen muilla funktioilla
+    reader->open(); //ohjelma jatkaa suorittamista
+    //reader-> exec mahdollistaa pysäyttää ohjelmien suorittamisen siihen asti kunnes on jotain tehty
+    qDebug()<<"aukesiko reader";
+
+
 }
 
 void MainWindow::handlePinButton()
 {
+    pinui = new PinUi(this); // muista alustaa pointteri
+    connect(pinui,&PinUi::sendPinNum,
+            this,&MainWindow::handlePinNum);
+
     qDebug() <<"Pin Button is pressed";
+    pinui->open();
+     qDebug()<<"aukesiko pinui";
+}
+
+void MainWindow::handleCardNum(QString s)
+{
+    qDebug()<<"Vastaanotettiin kortin numero";
+    ui->cardNum->setText(s);
+    reader->close();
+    delete reader;
+}
+
+void MainWindow::handlePinNum(QString s)
+{
+    qDebug()<<"Vastaanotettiin pin numero";
+    ui->pinNum->setText(s);
+    pinui->close();
+    delete pinui;
 }
