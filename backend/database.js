@@ -1,7 +1,12 @@
 
 const mysql = require("mysql2");
+const dotenv = require('dotenv');
+dotenv.config();
+// const ConnectionString = 'mysql://root:Treis56253@127.0.0.1:3306/bank_14_3';
+// const connection = mysql.createPool(ConnectionString);
+const connection = mysql.createPool(process.env.MYSQL_SERVER);
 
-const connection = mysql.createPool({
+/*const connection = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || 'Treis56253',
@@ -9,7 +14,7 @@ const connection = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
-});
+});*/
 
 // Connect to the database
 connection.getConnection((err, conn) => {

@@ -1,4 +1,5 @@
 const db = require('../database.js');
+const bcrypt = require('bcrypt'); //npm install
 
 const card = {
     // Get all cards
@@ -11,24 +12,26 @@ const card = {
         return db.query('SELECT * FROM card WHERE card_id = ?', [cardId], callback);
     },
 
-    // Add a new card (Including rfid_code)
+    // Add a new card 
     add(newCard, callback){
+        bcrypt.hash(newCard.pin_code, 10, function(err, hashed_pin_code){
         return db.query('INSERT INTO card (customer_id, pin_code, rfid_code) VALUES (?, ?, ?)',
-        [newCard.customer_id, newCard.pin_code, newCard.rfid_code], callback);
+        [newCard.customer_id, hashed_pin_code, newCard.rfid_code], callback);
+    })
     },
     
     
-    // Update card details (Including rfid_code)
+    // Update card details
     update(cardId, updatedCard, callback) {
-        if (!updatedCard.pin_code || !updatedCard.rfid_code) {
-            return callback({ message: "pin_code and rfid_code are required" }, null);
-        }
-
+       // if (!updatedCard.pin_code || !updatedCard.rfid_code) {
+        //    return callback({ message: "pin_code and rfid_code are required" }, null);
+       // }
+        bcrypt.hash(updatedCard.pin_code, 10, function(err, hsahed_pin_code){
         return db.query(
-            'UPDATE card SET pin_code = ?, rfid_code = ? WHERE card_id = ?',
-            [updatedCard.pin_code, updatedCard.rfid_code, cardId], 
-            callback
+            'UPDATE card SET pin_code = ? WHERE card_id = ?',
+            [updatedCard.pin_code, cardId], callback
         );
+    })
     },
 
     // Delete a card 
@@ -42,6 +45,10 @@ const card = {
             }
             callback(null, result);
         });
+    },
+
+    checkPin(cardId, callback){
+        return db.query('SELECT pin_code FROM card WHERE card_id = ?', [cardId], callback);
     }
 };
 
