@@ -24,7 +24,7 @@ router.get('/:card_id', function (request, response) {
     });
 });
 
-// Add a new card (Now includes rfid_code)
+// Add a new card 
 router.post('/', function (request, response) {
     const { customer_id, pin_code, rfid_code } = request.body;
 
@@ -40,13 +40,13 @@ router.post('/', function (request, response) {
     });
 });
 
-// Update card (Now includes rfid_code)
+// Update card 
 router.put('/:card_id', function (request, response) {
-    const { pin_code, rfid_code } = request.body;
+    const { pin_code } = request.body;
 
-    if (!pin_code || !rfid_code) {
-        return response.status(400).json({ message: "pin_code and rfid_code are required" });
-    }
+    //if (!pin_code || !rfid_code) {
+    //    return response.status(400).json({ message: "pin_code and rfid_code are required" });
+    //}
 
     card.update(request.params.card_id, request.body, function (err, result) {
         if (err) {

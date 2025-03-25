@@ -13,6 +13,9 @@ var cardaccountRouter = require('./routes/cardaccount');
 var cardRouter = require('./routes/card');
 var transactionRouter = require('./routes/transaction');
 
+var loginRouter = require('./routes/login');
+var jwt = require('jsonwebtoken');
+
 var app = express();
 
 // Middleware
@@ -24,21 +27,38 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/', indexRouter);
+app.use('/login', loginRouter);
+//suojatut reitit
+app.use(authenticateToken);
 app.use('/customer', customerRouter);
 app.use('/account', accountRouter);
 app.use('/cardaccount', cardaccountRouter);
 app.use('/card', cardRouter);
 app.use('/transaction', transactionRouter);
 
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+
+    console.log("token = "+token);
+    if (token == null) return res.sendStatus(401)
+
+    jwt.verify(token, process.env.MY_TOKEN, function(err, user) {
+
+      if (err) return res.sendStatus(403)
+
+      req.user = user
+
+      next()
+    })
+  }
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
 
-var port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);;
-});
 
 
 module.exports = app;
