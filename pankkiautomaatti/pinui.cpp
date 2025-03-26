@@ -58,9 +58,9 @@ void PinUi::numberClickHandler(int n)
         //laita n -> num1
         ui->NumeroJono->setText(numStr); */
 
-    QString numStr = ui->NumeroJono->text(); //haetaan tiedot, ui numerojonosta
+    QString numStr = ui->NumeroJono->text(); //haetaan tiedot
     numStr.append(QString::number(n));       //https://doc.qt.io/qt-6/qstring.html#append
-    ui->NumeroJono->setText(numStr);         //päivitetään tiedot
+    ui->NumeroJono->setText(numStr);         //päivitetään tiedot uuteen numerojonoon
     qDebug() << "Painettu numero on: " << n;
     qDebug() << "Numerojono on tällä hetkellä: " << numStr;
 
