@@ -48,7 +48,7 @@ const card = {
     },
 
     checkPin(cardId, callback){
-        return db.query('SELECT pin_code FROM card WHERE card_id = ?', [cardId], callback);
+        return db.query('SELECT pin_code FROM card WHERE rfid_code = ?', [cardId], callback);
     }
 };
 

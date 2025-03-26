@@ -76,3 +76,27 @@ void MainWindow::handlePinuiTimeOut()
     pinui->close();
     delete pinui;
 }
+
+void MainWindow::on_btnLogin_clicked()
+{
+    qDebug()<<"Login clicked";
+
+    QJsonObject jsonObj;
+    jsonObj.insert("rfid_code", ui->cardNum->text());
+    jsonObj.insert("pin_code",ui->pinNum->text());
+
+    QString site_url="http://localhost:3000/login";
+    QNetworkRequest request(site_url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    manager = new QNetworkAccessManager(this);
+    connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::loginSlot);
+
+    reply = manager->post(request, QJsonDocument(jsonObj).toJson());
+}
+
+void MainWindow::loginSlot(QNetworkReply *reply)
+{
+    response_data = reply->readAll();
+    qDebug()<<response_data;
+}
