@@ -7,12 +7,14 @@ var logger = require('morgan');
 
 // Import routes
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var accountRouter = require('./routes/accountRoutes'); // router for bank-related API
-var customerRouter = require('./routes/customerRoutes'); // router for customer-related API
-var cardRouter = require('./routes/cardRoutes'); // router for card-related API
-var transactionRouter = require('./routes/transactionRoutes'); // router for transaction-related API
-var cardaccountRouter = require('./routes/cardaccountRoutes'); // router for cardaccount-related API
+var customerRouter = require('./routes/customer');
+var accountRouter = require('./routes/account');
+var cardaccountRouter = require('./routes/cardaccount');
+var cardRouter = require('./routes/card');
+var transactionRouter = require('./routes/transaction');
+
+var loginRouter = require('./routes/login');
+var jwt = require('jsonwebtoken');
 
 var app = express();
 
@@ -25,16 +27,38 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/accounts', accountRouter); // New route for banking operations
-app.use('/customers', customerRouter); // New route for customer operations
-app.use('/cards', cardRouter); // New route for card operations 
-app.use('/cardaccounts', cardaccountRouter); // New route for cardaccount operations
-app.use('/transactions', transactionRouter); // New route for transaction operations
+app.use('/login', loginRouter);
+//suojatut reitit
+app.use(authenticateToken);
+app.use('/customer', customerRouter);
+app.use('/account', accountRouter);
+app.use('/cardaccount', cardaccountRouter);
+app.use('/card', cardRouter);
+app.use('/transaction', transactionRouter);
 
-var port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);;
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+
+    console.log("token = "+token);
+    if (token == null) return res.sendStatus(401)
+
+    jwt.verify(token, process.env.MY_TOKEN, function(err, user) {
+
+      if (err) return res.sendStatus(403)
+
+      req.user = user
+
+      next()
+    })
+  }
+
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
 });
+
+
 
 module.exports = app;
