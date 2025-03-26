@@ -15,10 +15,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pin, &QPushButton::clicked,
             this, &MainWindow::handlePinButton);
 
-
-
-
-
 }
 
 MainWindow::~MainWindow()
@@ -68,6 +64,8 @@ void MainWindow::handlePinNum(QString s)
 {
     qDebug()<<"Vastaanotettiin pin numero";
     ui->pinNum->setText(s);
+    void setEchoMode(QLineEdit::EchoMode);
+    ui->pinNum->setEchoMode(QLineEdit::PasswordEchoOnEdit);
     pinui->close();
     delete pinui;
 }
