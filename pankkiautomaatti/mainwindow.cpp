@@ -1,5 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "maininterface.h"
+#include "pinui.h"
+#include "reader.h"
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -35,8 +38,6 @@ void MainWindow::handleCardButton()
     reader->open(); //ohjelma jatkaa suorittamista
     //reader-> exec mahdollistaa pysäyttää ohjelmien suorittamisen siihen asti kunnes on jotain tehty
     qDebug()<<"aukesiko reader";
-
-
 }
 
 void MainWindow::handlePinButton()
@@ -99,4 +100,27 @@ void MainWindow::loginSlot(QNetworkReply *reply)
 {
     response_data = reply->readAll();
     qDebug()<<response_data;
+
+    if(response_data.length()<2 || response_data == "db_error"){
+        qDebug()<<"Virhe yhteydessä, Connection Error.";
+
+        objMessageBox.setText("Virhe tietoliikenne yhteydessä. Error in communication");
+        objMessageBox.exec();
+    }
+    else {
+        if (response_data == "false") {
+            qDebug()<<"RFID or PIN incorrect.";
+            objMessageBox.setText("RFID and PIN are not correct.");
+            objMessageBox.exec();
+        }
+        else{
+            qDebug()<< response_data;
+            QByteArray token = "Bearer " + response_data;
+            MainInterface * objMainInterface = new MainInterface(this);
+            //objMainInterface->setUsername(ui->textUsername->text());
+            objMainInterface->setWebToken(token);
+
+            objMainInterface->open();
+        }
+    }
 }

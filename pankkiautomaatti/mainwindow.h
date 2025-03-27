@@ -8,6 +8,7 @@
 #include <QtNetwork>                // http
 #include <QNetworkAccessManager>    // http
 #include <QJsonDocument>            // http
+#include <QMessageBox>              // Include QMessageBox
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -30,7 +31,7 @@ private slots:
     void handlePinNum(QString);
     void handlePinuiTimeOut();
 
-    void on_btnLogin_clicked(); // Pekka had this function idk what it does, it was empty
+    void on_btnLogin_clicked();
     void loginSlot(QNetworkReply *reply); // http POST
 
 private:
@@ -41,6 +42,8 @@ private:
     QNetworkAccessManager *manager; // http POST
     QNetworkReply *reply;           // http POST
     QByteArray response_data;       // http POST
+
+    QMessageBox objMessageBox;      // Login ErrorBox
 
 
 };

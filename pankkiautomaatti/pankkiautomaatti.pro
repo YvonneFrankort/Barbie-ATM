@@ -11,16 +11,19 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
+    maininterface.cpp \
     mainwindow.cpp \
     pinui.cpp \
     reader.cpp
 
 HEADERS += \
+    maininterface.h \
     mainwindow.h \
     pinui.h \
     reader.h
 
 FORMS += \
+    maininterface.ui \
     mainwindow.ui \
     pinui.ui \
     reader.ui
