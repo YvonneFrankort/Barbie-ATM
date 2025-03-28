@@ -1,5 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "maininterface.h"
+#include "pinui.h"
+#include "reader.h"
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -35,8 +38,6 @@ void MainWindow::handleCardButton()
     reader->open(); //ohjelma jatkaa suorittamista
     //reader-> exec mahdollistaa pysäyttää ohjelmien suorittamisen siihen asti kunnes on jotain tehty
     qDebug()<<"aukesiko reader";
-
-
 }
 
 void MainWindow::handlePinButton()
@@ -75,4 +76,51 @@ void MainWindow::handlePinuiTimeOut()
     qDebug()<<"Vastaanotettiin pinUI TIMEOUT ";
     pinui->close();
     delete pinui;
+}
+
+void MainWindow::on_btnLogin_clicked()
+{
+    qDebug()<<"Login clicked";
+
+    QJsonObject jsonObj;
+    jsonObj.insert("rfid_code", ui->cardNum->text());
+    jsonObj.insert("pin_code",ui->pinNum->text());
+
+    QString site_url="http://localhost:3000/login";
+    QNetworkRequest request(site_url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    manager = new QNetworkAccessManager(this);
+    connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::loginSlot);
+
+    reply = manager->post(request, QJsonDocument(jsonObj).toJson());
+}
+
+void MainWindow::loginSlot(QNetworkReply *reply)
+{
+    response_data = reply->readAll();
+    qDebug()<<response_data;
+
+    if(response_data.length()<2 || response_data == "db_error"){
+        qDebug()<<"Virhe yhteydessä, Connection Error.";
+
+        objMessageBox.setText("Virhe tietoliikenne yhteydessä. Error in communication");
+        objMessageBox.exec();
+    }
+    else {
+        if (response_data == "false") {
+            qDebug()<<"RFID or PIN incorrect.";
+            objMessageBox.setText("RFID and PIN are not correct.");
+            objMessageBox.exec();
+        }
+        else{
+            qDebug()<< response_data;
+            QByteArray token = "Bearer " + response_data;
+            MainInterface * objMainInterface = new MainInterface(this);
+            //objMainInterface->setUsername(ui->textUsername->text());
+            objMainInterface->setWebToken(token);
+
+            objMainInterface->open();
+        }
+    }
 }

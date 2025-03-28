@@ -5,6 +5,11 @@
 #include "reader.h"
 #include "pinui.h"
 
+#include <QtNetwork>                // http
+#include <QNetworkAccessManager>    // http
+#include <QJsonDocument>            // http
+#include <QMessageBox>              // Include QMessageBox
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -26,10 +31,19 @@ private slots:
     void handlePinNum(QString);
     void handlePinuiTimeOut();
 
+    void on_btnLogin_clicked();
+    void loginSlot(QNetworkReply *reply); // http POST
+
 private:
     Ui::MainWindow *ui;
     Reader * reader;
     PinUi*pinui;
+
+    QNetworkAccessManager *manager; // http POST
+    QNetworkReply *reply;           // http POST
+    QByteArray response_data;       // http POST
+
+    QMessageBox objMessageBox;      // Login ErrorBox
 
 
 };
