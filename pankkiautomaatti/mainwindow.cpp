@@ -11,13 +11,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     //connect(lähettäjänosoite, lähettäjänsignaalifunktionosoite,
-    // vastaanottajanosoite, vastaanottajansignaaliFunktiosoite
-    connect(ui->card, &QPushButton::clicked,
+    //        vastaanottajanosoite, vastaanottajansignaaliFunktiosoite
+    connect(ui->card, &QPushButton::clicked,        // Card button connection
             this, &MainWindow::handleCardButton);
-
-    connect(ui->pin, &QPushButton::clicked,
+    connect(ui->pin, &QPushButton::clicked,         // Pin button connection
             this, &MainWindow::handlePinButton);
-
 }
 
 MainWindow::~MainWindow()
@@ -31,18 +29,16 @@ void MainWindow::handleCardButton()
     reader = new Reader(this);
     connect(reader,&Reader::sendCardNum,
             this,&MainWindow::handleCardNum);
-    //sitte kun RFID muuta osoite
+    //sitte kun RFID muuta osoite (?)
 
     qDebug() <<"Card Button is pressed";
-    //show() mahdollistaa ohjelman suorittamisen muilla funktioilla
-    reader->open(); //ohjelma jatkaa suorittamista
-    //reader-> exec mahdollistaa pysäyttää ohjelmien suorittamisen siihen asti kunnes on jotain tehty
+    reader->open();
     qDebug()<<"aukesiko reader";
 }
 
 void MainWindow::handlePinButton()
 {
-    pinui = new PinUi(this); // muista alustaa pointteri
+    pinui = new PinUi(this);        // HOX! Muista alustaa pointteri :)
     connect(pinui,&PinUi::sendPinNum,
             this,&MainWindow::handlePinNum);
     connect(pinui,&PinUi::PinuiTimeOut,
@@ -50,7 +46,7 @@ void MainWindow::handlePinButton()
 
     qDebug() <<"Pin Button is pressed";
     pinui->open();
-     qDebug()<<"aukesiko pinui"; //tehään kaikesta DYNAAMINEN (alustus -> destruktori -> CONNECT MUISTA CONNECT9
+    qDebug()<<"aukesiko pinui"; //tehään kaikesta DYNAAMINEN (alustus -> destruktori -> CONNECT MUISTA CONNECT (?)
 }
 
 void MainWindow::handleCardNum(QString s)
@@ -66,7 +62,7 @@ void MainWindow::handlePinNum(QString s)
     qDebug()<<"Vastaanotettiin pin numero";
     ui->pinNum->setText(s);
     void setEchoMode(QLineEdit::EchoMode);
-    ui->pinNum->setEchoMode(QLineEdit::PasswordEchoOnEdit);
+    ui->pinNum->setEchoMode(QLineEdit::PasswordEchoOnEdit); // Hashing tapahtuu tässä
     pinui->close();
     delete pinui;
 }
@@ -91,7 +87,8 @@ void MainWindow::on_btnLogin_clicked()
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     manager = new QNetworkAccessManager(this);
-    connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::loginSlot);
+    connect(manager, &QNetworkAccessManager::finished,
+            this, &MainWindow::loginSlot);
 
     reply = manager->post(request, QJsonDocument(jsonObj).toJson());
 }
@@ -99,28 +96,51 @@ void MainWindow::on_btnLogin_clicked()
 void MainWindow::loginSlot(QNetworkReply *reply)
 {
     response_data = reply->readAll();
-    qDebug()<<response_data;
+    qDebug() << response_data;
+
+    ui->attemptsLeft->setText(QString::number(remainingAttempts));
 
     if(response_data.length()<2 || response_data == "db_error"){
         qDebug()<<"Virhe yhteydessä, Connection Error.";
-
-        objMessageBox.setText("Virhe tietoliikenne yhteydessä. Error in communication");
-        objMessageBox.exec();
+        handleLoginError("Connection error.");
+        return;
     }
-    else {
-        if (response_data == "false") {
-            qDebug()<<"RFID or PIN incorrect.";
-            objMessageBox.setText("RFID and PIN are not correct.");
-            objMessageBox.exec();
-        }
-        else{
-            qDebug()<< response_data;
-            QByteArray token = "Bearer " + response_data;
-            MainInterface * objMainInterface = new MainInterface(this);
-            //objMainInterface->setUsername(ui->textUsername->text());
-            objMainInterface->setWebToken(token);
+    if(response_data == "false"){
+        remainingAttempts--;
+        updateAttemptsDisplay();
 
-            objMainInterface->open();
+        if(remainingAttempts <= 0){
+            ui->btnLogin->setEnabled(false);
+            handleLoginError("Login denied");
         }
+        else {
+            handleLoginError("Login failed. RFID or PIN incorrect.");
+        }
+        return;
     }
+    // Login onnistuu
+    QByteArray token = "Bearer " + response_data;
+    qDebug() << "Token received from login:" << token;
+
+    MainInterface *objMainInterface = new MainInterface(this);
+    objMainInterface->setCardNum(ui->cardNum->text());
+    objMainInterface->setWebToken(token);
+    objMainInterface->open(); // Should i use show, open or exec (?)
+    // this->hide();
+
+    reply->deleteLater();
+    manager->deleteLater();
+}
+
+void MainWindow::handleLoginError(const QString &message)
+{
+    qDebug() << message;
+    objMessageBox.setText(message);
+    objMessageBox.exec();
+
+}
+
+void MainWindow::updateAttemptsDisplay()
+{
+    ui->attemptsLeft->setText(QString::number(remainingAttempts));
 }

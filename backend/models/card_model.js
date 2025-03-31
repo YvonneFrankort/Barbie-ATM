@@ -26,7 +26,7 @@ const card = {
        // if (!updatedCard.pin_code || !updatedCard.rfid_code) {
         //    return callback({ message: "pin_code and rfid_code are required" }, null);
        // }
-        bcrypt.hash(updatedCard.pin_code, 10, function(err, hsahed_pin_code){
+        bcrypt.hash(updatedCard.pin_code, 10, function(err, hashed_pin_code){
         return db.query(
             'UPDATE card SET pin_code = ? WHERE card_id = ?',
             [updatedCard.pin_code, cardId], callback

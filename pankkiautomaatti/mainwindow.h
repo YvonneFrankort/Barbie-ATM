@@ -32,7 +32,7 @@ private slots:
     void handlePinuiTimeOut();
 
     void on_btnLogin_clicked();
-    void loginSlot(QNetworkReply *reply); // http POST
+    void loginSlot(QNetworkReply *response); // http POST
 
 private:
     Ui::MainWindow *ui;
@@ -44,7 +44,9 @@ private:
     QByteArray response_data;       // http POST
 
     QMessageBox objMessageBox;      // Login ErrorBox
+    int remainingAttempts = 3;      // Attempts variable, initialized at 3
 
-
+    void handleLoginError(const QString &message);
+    void updateAttemptsDisplay();
 };
 #endif // MAINWINDOW_H

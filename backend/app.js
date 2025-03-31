@@ -12,9 +12,12 @@ var accountRouter = require('./routes/account');
 var cardaccountRouter = require('./routes/cardaccount');
 var cardRouter = require('./routes/card');
 var transactionRouter = require('./routes/transaction');
+var depositRouter = require('./routes/deposit');
+var balanceRouter = require('./routes/balance');
 
 var loginRouter = require('./routes/login');
 var jwt = require('jsonwebtoken');
+const deposit = require("./models/deposit_model");
 
 var app = express();
 
@@ -35,6 +38,8 @@ app.use('/account', accountRouter);
 app.use('/cardaccount', cardaccountRouter);
 app.use('/card', cardRouter);
 app.use('/transaction', transactionRouter);
+app.use('/deposit', depositRouter);
+app.use('/balance', balanceRouter);
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
