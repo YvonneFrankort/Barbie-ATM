@@ -2,6 +2,7 @@
 #define MAININTERFACE_H
 #include <QDialog>
 #include <QNetworkAccessManager>
+#include <QMessageBox>
 
 namespace Ui {
 class MainInterface;
@@ -21,10 +22,14 @@ public:
 
 private slots:
     void handleBalanceBtn();
-    void myBalanceSlot(QNetworkReply *reply);
+    void getBalanceSlot(QNetworkReply *reply);
 
     void handleTransactionsBtn();
+
     void handleDepositBtn();
+    void addDeposit(QNetworkReply *reply);
+
+
     void handleWithdrawBtn();
     void handleTransferBtn();
     void handleLogOutBtn();
@@ -35,8 +40,9 @@ private:
     QString cardNum;
 
     QNetworkAccessManager *manager;
-    QByteArray response_data;
     QNetworkReply *reply;
+    QByteArray response_data;
+    QMessageBox objMessageBox;
     };
 
 #endif // MAININTERFACE_H

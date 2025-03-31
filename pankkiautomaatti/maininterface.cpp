@@ -54,20 +54,39 @@ void MainInterface::setCardNum(const QString &newCardNum)
 void MainInterface::handleBalanceBtn()
 {
     qDebug() << "Balance button clicked.";
-    QString site_url=environment::base_url()+"/balance/"+cardNum;
+
+
+    QString site_url="http://localhost:3000/balance/"+cardNum;
     QNetworkRequest request(site_url);
-    request.setRawHeader(QByteArray("Authorization"),(webToken));
+
+    QByteArray myToken=webToken;
+    request.setRawHeader(QByteArray("Authorization"),(myToken));
+
     manager = new QNetworkAccessManager(this);
 
-    connect(manager, &QNetworkAccessManager::finished, this, &MainInterface::myBalanceSlot);
+    connect(manager, &QNetworkAccessManager::finished, this, &MainInterface::getBalanceSlot);
 
     reply = manager->get(request);
-
 }
 
-void MainInterface::myBalanceSlot(QNetworkReply *reply)
+void MainInterface::getBalanceSlot(QNetworkReply *reply)
 {
+    QByteArray response_data=reply->readAll();
+    qDebug() << "DATA: " << response_data;
 
+    QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
+
+    if(!json_doc.isNull() && json_doc.isObject()){
+        QJsonObject json_obj = json_doc.object();
+        QString balance = json_obj.value("balance").toString();
+
+        // Show popup without the actual balance
+        QMessageBox msgBox;
+        msgBox.setText("Your balance is: "+balance+" euros");
+        msgBox.exec();
+    }
+    reply->deleteLater();
+    manager->deleteLater();
 }
 
 
@@ -79,6 +98,57 @@ void MainInterface::handleTransactionsBtn()
 void MainInterface::handleDepositBtn()
 {
     qDebug() << "Deposit button clicked.";
+
+    // Ask user to enter deposit amount
+    bool ok;
+    double amount = QInputDialog::getDouble(
+        this,
+        "Enter Deposit Amount",
+        "Amount (€):",
+        0,     // default value
+        0,     // min value
+        10000, // max value
+        2,     // decimals
+        &ok
+    );
+
+    // If user pressed OK
+    if (ok)
+    {
+        QJsonObject jsonObj;
+        jsonObj.insert("rfid_code", cardNum); // assumed globally stored
+        jsonObj.insert("amount", amount);
+
+        QString site_url = "http://localhost:3000/deposit";
+        QNetworkRequest request(site_url);
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+        QByteArray myToken = webToken; // no need to convert if already QByteArray
+        request.setRawHeader("Authorization", myToken);
+
+        manager = new QNetworkAccessManager(this);
+        connect(manager, &QNetworkAccessManager::finished, this, &MainInterface::addDeposit);
+
+        reply = manager->post(request, QJsonDocument(jsonObj).toJson());
+    }
+    else
+    {
+        qDebug() << "User canceled deposit input.";
+    }
+}
+
+void MainInterface::addDeposit(QNetworkReply *reply)
+{
+    response_data = reply->readAll();
+    qDebug() << response_data;
+
+    QJsonDocument doc = QJsonDocument::fromJson(response_data);
+    QString message = doc.object().value("message").toString();
+
+    QMessageBox::information(this, "Deposit Status", message);
+
+    reply->deleteLater();
+    manager->deleteLater();
 }
 
 void MainInterface::handleWithdrawBtn()

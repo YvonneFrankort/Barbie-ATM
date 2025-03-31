@@ -2,10 +2,10 @@ const db = require('../database.js');
 
 const deposit = {
     // Add a new deposit
-    addDeposit(account_id, amount, callback){
+    addDeposit(rfid_code, amount, callback) {
         return db.query(
-            'UPDATE account SET balance = balance + ? WHERE account_id = ?',
-            [amount, account_id], callback
+            'UPDATE account SET balance = balance + ? WHERE account_id = (SELECT ca.account_id FROM card c JOIN cardaccount ca ON c.card_id = ca.card_id WHERE c.rfid_code = ?)',
+            [amount, rfid_code], callback
         );
     }
 }
