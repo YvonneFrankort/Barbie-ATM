@@ -31,6 +31,8 @@ private slots:
 
 
     void handleWithdrawBtn();
+    void addWithdraw(QNetworkReply *reply);
+
     void handleTransferBtn();
     void handleLogOutBtn();
 

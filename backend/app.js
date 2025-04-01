@@ -14,6 +14,7 @@ var cardRouter = require('./routes/card');
 var transactionRouter = require('./routes/transaction');
 var depositRouter = require('./routes/deposit');
 var balanceRouter = require('./routes/balance');
+var withdrawRouter = require('./routes/withdraw');
 
 var loginRouter = require('./routes/login');
 var jwt = require('jsonwebtoken');
@@ -40,6 +41,7 @@ app.use('/card', cardRouter);
 app.use('/transaction', transactionRouter);
 app.use('/deposit', depositRouter);
 app.use('/balance', balanceRouter);
+app.use('/withdraw', withdrawRouter);
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']

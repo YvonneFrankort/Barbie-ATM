@@ -153,6 +153,57 @@ void MainInterface::addDeposit(QNetworkReply *reply)
 void MainInterface::handleWithdrawBtn()
 {
     qDebug() << "Withdraw button clicked.";
+
+    // Ask user to enter withdraw amount
+    bool ok;
+    double amount = QInputDialog::getDouble(
+        this,
+        "Enter Withdraw Amount",
+        "Amount (€):",
+        0,     // default value
+        0,     // min value
+        10000, // max value
+        2,     // decimals
+        &ok
+        );
+
+    // If user pressed OK
+    if (ok)
+    {
+        QJsonObject jsonObj;
+        jsonObj.insert("rfid_code", cardNum);
+        jsonObj.insert("amount", amount);
+
+        QString site_url = "http://localhost:3000/withdraw";
+        QNetworkRequest request(site_url);
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+        QByteArray myToken = webToken;
+        request.setRawHeader("Authorization", myToken);
+
+        manager = new QNetworkAccessManager(this);
+        connect(manager, &QNetworkAccessManager::finished, this, &MainInterface::addDeposit);
+
+        reply = manager->post(request, QJsonDocument(jsonObj).toJson());
+    }
+    else
+    {
+        qDebug() << "User canceled withdraw input.";
+    }
+}
+
+void MainInterface::addWithdraw(QNetworkReply *reply)
+{
+    response_data = reply->readAll();
+    qDebug() << response_data;
+
+    QJsonDocument doc = QJsonDocument::fromJson(response_data);
+    QString message = doc.object().value("message").toString();
+
+    QMessageBox::information(this, "Withdraw Status", message);
+
+    reply->deleteLater();
+    manager->deleteLater();
 }
 
 void MainInterface::handleTransferBtn()
