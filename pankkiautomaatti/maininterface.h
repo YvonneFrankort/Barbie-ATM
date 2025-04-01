@@ -25,6 +25,7 @@ private slots:
     void getBalanceSlot(QNetworkReply *reply);
 
     void handleTransactionsBtn();
+    void getTransactions(QNetworkReply *reply);
 
     void handleDepositBtn();
     void addDeposit(QNetworkReply *reply);

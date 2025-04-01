@@ -37,7 +37,6 @@ MainInterface::~MainInterface()
 }
 
 
-
 void MainInterface::setWebToken(const QByteArray &newWebtoken)
 {
     webToken = newWebtoken;
@@ -49,7 +48,6 @@ void MainInterface::setCardNum(const QString &newCardNum)
     cardNum = newCardNum;
     ui->cardNumLabel->setText(cardNum);
 }
-
 
 void MainInterface::handleBalanceBtn()
 {
@@ -92,6 +90,52 @@ void MainInterface::getBalanceSlot(QNetworkReply *reply)
 void MainInterface::handleTransactionsBtn()
 {
     qDebug() << "Transactions button clicked.";
+
+    QString site_url="http://localhost:3000/transaction/rfid/"+cardNum;
+    QNetworkRequest request(site_url);
+
+    QByteArray myToken=webToken;
+    request.setRawHeader(QByteArray("Authorization"),(myToken));
+
+    manager = new QNetworkAccessManager(this);
+
+    connect(manager, &QNetworkAccessManager::finished, this, &MainInterface::getTransactions);
+
+    reply = manager->get(request);
+}
+
+void MainInterface::getTransactions(QNetworkReply *reply)
+{
+    QByteArray response_data=reply->readAll();
+    qDebug() << "DATA: " << response_data;
+
+    QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
+
+    if (!json_doc.isNull() && json_doc.isArray()) {
+        QJsonArray json_array = json_doc.array();
+        QString transactions;
+
+        for (int i = 0; i < json_array.size(); ++i) {
+            QJsonObject obj = json_array.at(i).toObject();
+
+            QString rawDate = obj.value("date").toString();
+            QDateTime dateTime = QDateTime::fromString(rawDate, Qt::ISODate);
+            QString formattedDate = dateTime.toString("dd/MM/yyyy - hh:mm");
+
+            QString transaction = QString("Date: %1 \n Type: %2 \n Summa: %3 euros \n")
+                                      // .arg(obj.value("transaction_id").toInt())
+                                      .arg(formattedDate)
+                                      .arg(obj.value("transaction_type").toString())
+                                      .arg(obj.value("summa").toString());
+            transactions += transaction + "\n";
+        }
+
+        QMessageBox msgBox;
+        msgBox.setText("Your 10 latest transactions are: "+transactions);
+        msgBox.exec();
+    }
+    reply->deleteLater();
+    manager->deleteLater();
 }
 
 void MainInterface::handleDepositBtn()

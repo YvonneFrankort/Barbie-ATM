@@ -21,6 +21,26 @@ const transaction = {
         );
     },
 
+    // Get transaction by RFID
+    getByRFID(rfid_code, callback) {
+        return db.query(
+            `SELECT transaction.transaction_id, transaction.date, transaction.transaction_type, transaction.summa, transaction.customer_id
+            FROM transaction
+            JOIN cardaccount on transaction.account_id = cardaccount.account_id
+            JOIN card on card.card_id = cardaccount.card_id
+            WHERE card.rfid_code = ?
+            ORDER BY transaction.date DESC
+            LIMIT 10`, [rfid_code], function(err, result){
+                if(err) {
+                    callback(err, null);
+                }
+                else {
+                    callback(null, result);
+                }
+            }
+        );
+    },
+
     // Add a new transaction (auto-sets date)
     add(newTransaction, callback) {
         db.query(

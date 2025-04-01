@@ -27,6 +27,20 @@ router.get('/:id', function (request, response) {
     });
 });
 
+router.get('/rfid/:id', function(request, response) {
+    transaction.getByRFID(request.params.id, function(err, result) {
+        if(err) {
+            response.status(500).json(err);
+        }
+        else if(!result || result.length === 0) {
+            response.status(404).json({message: "No transactions found for this cardnumber"});
+        }
+        else {
+            response.json(result);
+        }
+    });
+});
+
 // Add a new transaction 
 router.post('/', function (req, res) {
     const { account_id, card_id, transaction_type, customer_id } = req.body;
