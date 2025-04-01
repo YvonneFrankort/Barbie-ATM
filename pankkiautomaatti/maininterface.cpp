@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "ui_maininterface.h"
 #include "environment.h"
+#include "pinui.h"
 #include <QDialog>
 #include <QInputDialog>
 #include <QMessageBox>
@@ -48,6 +49,8 @@ void MainInterface::setCardNum(const QString &newCardNum)
     cardNum = newCardNum;
     ui->cardNumLabel->setText(cardNum);
 }
+
+
 
 void MainInterface::handleBalanceBtn()
 {
@@ -258,5 +261,6 @@ void MainInterface::handleTransferBtn()
 void MainInterface::handleLogOutBtn()
 {
     qDebug() << "Log out button clicked";
-}
 
+    close();
+}

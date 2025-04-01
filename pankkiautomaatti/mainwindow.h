@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "reader.h"
 #include "pinui.h"
+#include "maininterface.h"
 
 #include <QtNetwork>                // http
 #include <QNetworkAccessManager>    // http
@@ -24,6 +25,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
 private slots:
     void handleCardButton();
     void handlePinButton();
@@ -34,10 +36,12 @@ private slots:
     void on_btnLogin_clicked();
     void loginSlot(QNetworkReply *response); // http POST
 
+
 private:
     Ui::MainWindow *ui;
     Reader * reader;
     PinUi*pinui;
+    MainInterface *logout;
 
     QNetworkAccessManager *manager; // http POST
     QNetworkReply *reply;           // http POST

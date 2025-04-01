@@ -35,12 +35,14 @@ private slots:
     void addWithdraw(QNetworkReply *reply);
 
     void handleTransferBtn();
+
     void handleLogOutBtn();
 
 private:
     Ui::MainInterface *ui;
     QByteArray webToken;
     QString cardNum;
+    QString pinNum;
 
     QNetworkAccessManager *manager;
     QNetworkReply *reply;

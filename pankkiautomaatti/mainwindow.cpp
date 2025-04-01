@@ -10,12 +10,18 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    logout = new MainInterface(this);
+
     //connect(lähettäjänosoite, lähettäjänsignaalifunktionosoite,
     //        vastaanottajanosoite, vastaanottajansignaaliFunktiosoite
     connect(ui->card, &QPushButton::clicked,        // Card button connection
             this, &MainWindow::handleCardButton);
     connect(ui->pin, &QPushButton::clicked,         // Pin button connection
             this, &MainWindow::handlePinButton);
+
+
+
 }
 
 MainWindow::~MainWindow()
@@ -23,6 +29,8 @@ MainWindow::~MainWindow()
     delete ui;
     delete reader;
 }
+
+
 
 void MainWindow::handleCardButton()
 {
@@ -127,6 +135,10 @@ void MainWindow::loginSlot(QNetworkReply *reply)
     objMainInterface->setWebToken(token);
     objMainInterface->open(); // Should i use show, open or exec (?)
     // this->hide();
+
+    ui->cardNum->clear();
+    ui->pinNum->clear();
+    ui->attemptsLeft->clear();
 
     reply->deleteLater();
     manager->deleteLater();
