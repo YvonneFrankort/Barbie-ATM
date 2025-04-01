@@ -80,7 +80,6 @@ void MainInterface::getBalanceSlot(QNetworkReply *reply)
         QJsonObject json_obj = json_doc.object();
         QString balance = json_obj.value("balance").toString();
 
-        // Show popup without the actual balance
         QMessageBox msgBox;
         msgBox.setText("Your balance is: "+balance+" euros");
         msgBox.exec();
@@ -116,14 +115,14 @@ void MainInterface::handleDepositBtn()
     if (ok)
     {
         QJsonObject jsonObj;
-        jsonObj.insert("rfid_code", cardNum); // assumed globally stored
+        jsonObj.insert("rfid_code", cardNum);
         jsonObj.insert("amount", amount);
 
         QString site_url = "http://localhost:3000/deposit";
         QNetworkRequest request(site_url);
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-        QByteArray myToken = webToken; // no need to convert if already QByteArray
+        QByteArray myToken = webToken;
         request.setRawHeader("Authorization", myToken);
 
         manager = new QNetworkAccessManager(this);

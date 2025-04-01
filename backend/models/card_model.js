@@ -28,8 +28,8 @@ const card = {
        // }
         bcrypt.hash(updatedCard.pin_code, 10, function(err, hashed_pin_code){
         return db.query(
-            'UPDATE card SET pin_code = ? WHERE card_id = ?',
-            [updatedCard.pin_code, cardId], callback
+            'UPDATE card SET pin_code = ?, rfid_code = ? WHERE card_id = ?',
+            [hashed_pin_code, updatedCard.rfid_code, cardId], callback
         );
     })
     },
