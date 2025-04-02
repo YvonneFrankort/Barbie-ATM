@@ -2,24 +2,45 @@
 #include "ui_mainwindow.h"
 #include "maininterface.h"
 #include "pinui.h"
-#include "reader.h"
 #include <QDebug>
+
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    qDebug()<<"MainWindow aukaistu!!";
+
     ui->setupUi(this);
 
     logout = new MainInterface(this);
 
     //connect(lähettäjänosoite, lähettäjänsignaalifunktionosoite,
-    //        vastaanottajanosoite, vastaanottajansignaaliFunktiosoite
-    connect(ui->card, &QPushButton::clicked,        // Card button connection
-            this, &MainWindow::handleCardButton);
-    connect(ui->pin, &QPushButton::clicked,         // Pin button connection
+    // vastaanottajanosoite, vastaanottajansignaaliFunktiosoite
+
+   /* connect(ui->card, &QPushButton::clicked,
+            this, &MainWindow::handleCardButton);*/ //TÄMÄ NYT 2104
+
+    connect(ui->pin, &QPushButton::clicked,
             this, &MainWindow::handlePinButton);
 
+    //ptrRFID = new RFID_DLL;
+    rfid = new rfidui(this);
+
+    /*connect(ptrRFID,&RFID_DLL::sendSignalToExe,
+            this,&MainWindow::handleCardNum); //Tämä lennättää signaalin lukulaitteesta*/ //TÄMÄ NYT 290325-2104 meri otti pois käytöstä. Katotaanko tarviiko enää tulevaisuudessa vai heitetäänkö pois
+
+    connect(rfid,&rfidui::sendSignalToExe,
+            this, &MainWindow::handleSignal); // handlaa kortin numeron lineEdittiin
+
+
+    //        vastaanottajanosoite, vastaanottajansignaaliFunktiosoite
+  //  connect(ui->card, &QPushButton::clicked,        // Card button connection
+    //        this, &MainWindow::handleCardButton);
+
+   connect(ui->pin, &QPushButton::clicked,         // Pin button connection
+            this, &MainWindow::handlePinButton); //tämä kahdesti, meri otti pois käytöstä mergen yhteydessä
 
 
 }
@@ -27,14 +48,30 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete reader;
+    //delete ptrRFID;
+    delete rfid;
 }
 
 
 
-void MainWindow::handleCardButton()
+/*void MainWindow::handleCardButton()
 {
-    reader = new Reader(this);
+
+    ptrRFID->test();
+    //rfid->test();
+
+
+    //sitte kun RFID muuta osoite
+
+    qDebug() <<"Card Button is pressed";
+
+    //reader->open(); //ohjelma jatkaa suorittamista
+    //reader->show() mahdollistaa ohjelman suorittamisen muilla funktioilla
+    //reader-> exec() mahdollistaa pysäyttää ohjelmien suorittamisen siihen asti kunnes on jotain tehty
+
+}*/ // TURHA!!! -meri 290325-2200
+
+    /*reader = new Reader(this);
     connect(reader,&Reader::sendCardNum,
             this,&MainWindow::handleCardNum);
     //sitte kun RFID muuta osoite (?)
@@ -42,7 +79,7 @@ void MainWindow::handleCardButton()
     qDebug() <<"Card Button is pressed";
     reader->open();
     qDebug()<<"aukesiko reader";
-}
+}*/
 
 void MainWindow::handlePinButton()
 {
@@ -57,13 +94,13 @@ void MainWindow::handlePinButton()
     qDebug()<<"aukesiko pinui"; //tehään kaikesta DYNAAMINEN (alustus -> destruktori -> CONNECT MUISTA CONNECT (?)
 }
 
-void MainWindow::handleCardNum(QString s)
+/*void MainWindow::handleCardNum()//QString s poistettu suluista
 {
-    qDebug()<<"Vastaanotettiin kortin numero";
-    ui->cardNum->setText(s);
-    reader->close();
-    delete reader;
-}
+    qDebug()<<"Vastaanotettiin RFIDkortinlukijan numeroDDDDDDDDDDDDDDDDDDDDDDDD";
+    rfid->openPort();
+    //ui->cardNum->setText(s); laitettu kommentiksi kun qstring poistettiin
+    // tämä hakee lukijan numeron
+}*/ // TÄMÄ 2157
 
 void MainWindow::handlePinNum(QString s)
 {
@@ -81,6 +118,53 @@ void MainWindow::handlePinuiTimeOut()
     pinui->close();
     delete pinui;
 }
+
+void MainWindow::handleSignal(QString st)
+{
+
+
+    connect(rfid,&rfidui::sendSignalToExe,
+            this, &MainWindow::handleSignal); // handlaa kortin numeron lineEdittiin
+
+    qDebug()<<"sain viestin rfid";
+    ui->cardNum->setText(st);
+    qDebug()<<"Suljen RFID";
+    rfid->closePort();
+    rfid->close();
+
+    //tämä hakee kortin numeron ((LUKIJASSA))
+}
+
+
+
+
+
+
+
+// tässä vaan hulluna väliä jotta meri osaa lukea... Rullaa vain alas päin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void MainWindow::on_btnLogin_clicked()
 {
@@ -156,3 +240,11 @@ void MainWindow::updateAttemptsDisplay()
 {
     ui->attemptsLeft->setText(QString::number(remainingAttempts));
 }
+
+void MainWindow::on_changeCard_clicked()
+{
+    rfid->openPort();
+    rfid->show();
+
+}
+

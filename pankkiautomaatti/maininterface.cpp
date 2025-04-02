@@ -14,6 +14,7 @@ MainInterface::MainInterface(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::MainInterface)
 {
+    qDebug()<<"MainInterFace aukaistu!!!";
     ui->setupUi(this);
 
     manager = new QNetworkAccessManager(this);
@@ -34,6 +35,7 @@ MainInterface::MainInterface(QWidget *parent)
 
 MainInterface::~MainInterface()
 {
+    qDebug()<<"MainInterFace TUHOTTU!!!";
     delete ui;
 }
 

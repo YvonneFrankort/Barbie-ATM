@@ -1,8 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include "rfid_dll.h"
+#include "rfidui.h"
 #include <QMainWindow>
-#include "reader.h"
 #include "pinui.h"
 #include "maininterface.h"
 
@@ -27,19 +27,20 @@ public:
 
 
 private slots:
-    void handleCardButton();
+    //void handleCardButton(); TURHAAAAA -meri 290325-2200
     void handlePinButton();
-    void handleCardNum(QString);
+    //void handleCardNum();//QString poistettu sulkujen sisältä. Okei this is useless... Meri 290325-2158. Mun puolesta voi poistaa varmaan kaikki handleCardNum systeemit koodista.
     void handlePinNum(QString);
     void handlePinuiTimeOut();
+    void handleSignal(QString); //ehkä sama asia kuin cardnum
 
     void on_btnLogin_clicked();
     void loginSlot(QNetworkReply *response); // http POST
 
+    void on_changeCard_clicked();
 
 private:
     Ui::MainWindow *ui;
-    Reader * reader;
     PinUi*pinui;
     MainInterface *logout;
 
@@ -49,6 +50,10 @@ private:
 
     QMessageBox objMessageBox;      // Login ErrorBox
     int remainingAttempts = 3;      // Attempts variable, initialized at 3
+
+    RFID_DLL * ptrRFID; //kirjasto
+    rfidui * rfid;
+
 
     void handleLoginError(const QString &message);
     void updateAttemptsDisplay();

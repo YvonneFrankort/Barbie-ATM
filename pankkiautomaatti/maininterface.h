@@ -38,6 +38,8 @@ private slots:
 
     void handleLogOutBtn();
 
+    //void on_dataBtn_clicked();
+
 private:
     Ui::MainInterface *ui;
     QByteArray webToken;
