@@ -26,6 +26,22 @@ router.get('/:id', function (request, response) {
     });
 });
 
+// Get customer name 
+router.get('/name/:name', function(request, response){
+    customer.getByName(request.params.id, function(err, result){
+        if(err){
+            response.status(500).json({error: err.message});
+        }
+        else if(result.length > 0) {
+            response.json(result[0]);
+        }
+        else {
+            response.status(404).json({message: "Customer not found"});
+        }
+    });
+});
+
+
 // Add a new customer
 router.post('/', function (request, response) {
     customer.add(request.body, function (err, result) {

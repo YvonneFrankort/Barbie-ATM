@@ -8,12 +8,12 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow), soundManager(new sound(this))
 {
     qDebug()<<"MainWindow aukaistu!!";
+    soundManager->playBackgroundMusic();
 
     ui->setupUi(this);
-
     logout = new MainInterface(this);
 
     //connect(lähettäjänosoite, lähettäjänsignaalifunktionosoite,

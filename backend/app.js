@@ -61,11 +61,13 @@ function authenticateToken(req, res, next) {
   }
 
 
-/* const PORT = process.env.PORT || 3000;
+//jos tämä käytössä käynnistys komennolalla node app.js tai nodemon app.js
+/*
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
-*/
 
+*/
 
 module.exports = app;

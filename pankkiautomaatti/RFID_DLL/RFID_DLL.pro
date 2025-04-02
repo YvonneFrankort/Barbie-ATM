@@ -28,3 +28,6 @@ unix {
 
 FORMS += \
     rfidui.ui
+
+RESOURCES += \
+    loginscreenATM.qrc

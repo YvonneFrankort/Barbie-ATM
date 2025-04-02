@@ -11,6 +11,7 @@ const cardaccount = {
 
     // Get card-account by card ID
     getByCardId(cardId, callback) {
+        console.log("täällä!")
         db.query('SELECT * FROM cardaccount WHERE card_id = ?', [cardId], (err, results) => {
             if (err) return callback(err, null);
             callback(null, results);

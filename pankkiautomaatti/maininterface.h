@@ -1,6 +1,7 @@
 #ifndef MAININTERFACE_H
 #define MAININTERFACE_H
 #include <QDialog>
+#include "barbiesong.h"
 #include <QNetworkAccessManager>
 #include <QMessageBox>
 
@@ -43,6 +44,8 @@ private slots:
 private:
     Ui::MainInterface *ui;
     QByteArray webToken;
+    // sound *soundManager;
+
     QString cardNum;
     QString pinNum;
 

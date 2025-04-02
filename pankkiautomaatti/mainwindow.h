@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include "pinui.h"
 #include "maininterface.h"
+#include "barbiesong.h"
 
 #include <QtNetwork>                // http
 #include <QNetworkAccessManager>    // http
@@ -57,5 +58,7 @@ private:
 
     void handleLoginError(const QString &message);
     void updateAttemptsDisplay();
+    sound *soundManager;
+
 };
 #endif // MAINWINDOW_H

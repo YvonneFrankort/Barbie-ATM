@@ -11,11 +11,11 @@
 #include <QDebug>
 
 MainInterface::MainInterface(QWidget *parent)
-    : QDialog(parent)
-    , ui(new Ui::MainInterface)
+    : QDialog(parent), ui(new Ui::MainInterface) // soundManager(new sound(this))
 {
-    qDebug()<<"MainInterFace aukaistu!!!";
+    qDebug() << "MainInterface aukaistu!!!";
     ui->setupUi(this);
+    // soundManager->playBackgroundMusic();
 
     manager = new QNetworkAccessManager(this);
 
@@ -37,6 +37,7 @@ MainInterface::~MainInterface()
 {
     qDebug()<<"MainInterFace TUHOTTU!!!";
     delete ui;
+    // delete soundManager;
 }
 
 
@@ -50,6 +51,7 @@ void MainInterface::setCardNum(const QString &newCardNum)
 {
     cardNum = newCardNum;
     ui->cardNumLabel->setText(cardNum);
+    // ui->nameLabel->setText();
 }
 
 
@@ -203,42 +205,57 @@ void MainInterface::handleWithdrawBtn()
 {
     qDebug() << "Withdraw button clicked.";
 
-    // Ask user to enter withdraw amount
-    bool ok;
-    double amount = QInputDialog::getDouble(
-        this,
-        "Enter Withdraw Amount",
-        "Amount (€):",
-        0,     // default value
-        0,     // min value
-        10000, // max value
-        2,     // decimals
-        &ok
-        );
+    double amount = 0;
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Select Withdraw Amount");
+    msgBox.setText("Choose an amount to withdraw:");
 
-    // If user pressed OK
-    if (ok)
+    QPushButton *btn10 = msgBox.addButton("10 €", QMessageBox::ActionRole);
+    QPushButton *btn20 = msgBox.addButton("20 €", QMessageBox::ActionRole);
+    QPushButton *btn50 = msgBox.addButton("50 €", QMessageBox::ActionRole);
+    QPushButton *btn100 = msgBox.addButton("100 €", QMessageBox::ActionRole);
+    QPushButton *btn200 = msgBox.addButton("200 €", QMessageBox::ActionRole);
+    QPushButton *btnOther = msgBox.addButton("Other", QMessageBox::ActionRole);
+    QPushButton *btnCancel = msgBox.addButton(QMessageBox::Cancel);
+
+    msgBox.exec();
+
+    if (msgBox.clickedButton() == btn10) amount = 10;
+    else if (msgBox.clickedButton() == btn20) amount = 20;
+    else if (msgBox.clickedButton() == btn50) amount = 50;
+    else if (msgBox.clickedButton() == btn100) amount = 100;
+    else if (msgBox.clickedButton() == btn200) amount = 200;
+    else if (msgBox.clickedButton() == btnOther)
     {
-        QJsonObject jsonObj;
-        jsonObj.insert("rfid_code", cardNum);
-        jsonObj.insert("amount", amount);
-
-        QString site_url = "http://localhost:3000/withdraw";
-        QNetworkRequest request(site_url);
-        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-        QByteArray myToken = webToken;
-        request.setRawHeader("Authorization", myToken);
-
-        manager = new QNetworkAccessManager(this);
-        connect(manager, &QNetworkAccessManager::finished, this, &MainInterface::addDeposit);
-
-        reply = manager->post(request, QJsonDocument(jsonObj).toJson());
+        bool ok;
+        amount = QInputDialog::getDouble(this, "Enter Amount", "Amount (€):", 0, 0, 10000, 2, &ok);
+        if (!ok || (amount != 10 && amount != 20 && amount != 50 && amount != 100 && amount != 200))
+        {
+            QMessageBox::warning(this, "Invalid Amount", "Please enter a valid banknote amount: 10, 20, 50, 100, or 200.");
+            return;
+        }
     }
     else
     {
         qDebug() << "User canceled withdraw input.";
+        return;
     }
+
+    QJsonObject jsonObj;
+    jsonObj.insert("rfid_code", cardNum);
+    jsonObj.insert("amount", amount);
+
+    QString site_url = "http://localhost:3000/withdraw";
+    QNetworkRequest request(site_url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QByteArray myToken = webToken;
+    request.setRawHeader("Authorization", myToken);
+
+    manager = new QNetworkAccessManager(this);
+    connect(manager, &QNetworkAccessManager::finished, this, &MainInterface::addWithdraw);
+
+    reply = manager->post(request, QJsonDocument(jsonObj).toJson());
 }
 
 void MainInterface::addWithdraw(QNetworkReply *reply)
@@ -266,3 +283,4 @@ void MainInterface::handleLogOutBtn()
 
     close();
 }
+
