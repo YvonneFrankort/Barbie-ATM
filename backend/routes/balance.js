@@ -17,4 +17,20 @@ router.get('/:rfid_code', function (request, response) {
     });
 });
 
+router.get('/credit_limit/:rfid_code', function(request, response) {
+    balance.getCreditLimit(request.params.rfid_code, function (err, result) {
+        if(err) {
+            response.status(500).json(err);
+        }
+        else {
+            if(result.length > 0) {
+                response.json(result[0]);
+            }
+            else {
+                response.status(404).json({ message: "Creditlimit not found"});
+            }
+        }
+    });
+});
+
 module.exports = router;

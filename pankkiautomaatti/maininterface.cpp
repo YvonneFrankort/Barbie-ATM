@@ -229,9 +229,9 @@ void MainInterface::handleWithdrawBtn()
     {
         bool ok;
         amount = QInputDialog::getDouble(this, "Enter Amount", "Amount (€):", 0, 0, 10000, 2, &ok);
-        if (!ok || (amount != 10 && amount != 20 && amount != 50 && amount != 100 && amount != 200))
+        if (!ok || fmod(amount, 10) != 0)
         {
-            QMessageBox::warning(this, "Invalid Amount", "Please enter a valid banknote amount: 10, 20, 50, 100, or 200.");
+            QMessageBox::warning(this, "Invalid Amount", "Please enter an amount that is a multiple of 10 (10, 20, 50, 100, 200, etc.).");
             return;
         }
     }

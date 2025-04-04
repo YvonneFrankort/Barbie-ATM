@@ -26,6 +26,21 @@ router.get('/:id', function (request, response) {
     });
 });
 
+// check account type
+router.get('/:id/account_type', function(request,response){
+    account.checkAccountType(request.params.id, function(err,result){
+        if(err){
+            response.status(500).json(err);
+        }
+        else if (result.length === 0){
+            response.status(404).json({message: "Account not found"});
+        }
+        else {
+            response.json(result[0]);
+        }
+    });
+});
+
 //get account by customer id
 router.get('/customer/:customer_id', function (req, res) {
     account.getByCustomerId(req.params.customer_id, function (err, result) {

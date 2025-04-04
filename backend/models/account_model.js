@@ -16,6 +16,14 @@ const account = {
         return db.query('SELECT * FROM account WHERE customer_id = ?', [customerId], callback);
     },
 
+    // Get account type
+    checkAccountType(id, callback) {
+        return db.query(`SELECT account.account_type FROM account 
+            JOIN cardaccount ON cardaccount.account_id = account.account_id
+            JOIN card ON card.card_id = cardaccount.card_id
+            WHERE card.rfid_code = ?`, [id], callback);
+    },
+
     // Add a new account with proper credit limit handling
     add(newAccount, callback) {
         const { customer_id, balance, account_type, credit_limit } = newAccount;
