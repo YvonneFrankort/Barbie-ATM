@@ -24,6 +24,15 @@ const account = {
             WHERE card.rfid_code = ?`, [id], callback);
     },
 
+    // Get account_number
+    getAccountNumber(id, callback) {
+        return db.query (`SELECT account.account_number FROM account
+            JOIN cardaccount ON cardaccount.account_id = account.account_id
+            JOIN card on card.card_id = cardaccount.account_id
+            WHERE card.rfid_code = ?`,[id], callback);
+    },
+    
+
     // Add a new account with proper credit limit handling
     add(newAccount, callback) {
         const { customer_id, balance, account_type, credit_limit } = newAccount;

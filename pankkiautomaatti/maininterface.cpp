@@ -31,6 +31,7 @@ MainInterface::MainInterface(QWidget *parent)
             this, &MainInterface::handleTransferBtn);
     connect(ui->logOutBtn, &QPushButton::clicked,
             this, &MainInterface::handleLogOutBtn);
+
 }
 
 MainInterface::~MainInterface()
@@ -283,4 +284,6 @@ void MainInterface::handleLogOutBtn()
 
     close();
 }
+
+
 
