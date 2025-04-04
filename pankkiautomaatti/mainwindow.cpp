@@ -39,8 +39,8 @@ MainWindow::MainWindow(QWidget *parent)
   //  connect(ui->card, &QPushButton::clicked,        // Card button connection
     //        this, &MainWindow::handleCardButton);
 
-   connect(ui->pin, &QPushButton::clicked,         // Pin button connection
-            this, &MainWindow::handlePinButton); //tämä kahdesti, meri otti pois käytöstä mergen yhteydessä
+   /* connect(ui->pin, &QPushButton::clicked,         // Pin button connection
+            this, &MainWindow::handlePinButton); //tämä kahdesti, meri otti pois käytöstä mergen yhteydessä */
 
 
 }
