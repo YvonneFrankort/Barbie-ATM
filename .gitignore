@@ -1,5 +1,5 @@
 backend/node_modules/
-bank-automat/build/
-bank-automat/*.user
+pankkiautomaatti/build/
+pankkiautomaatti/*.user
 
 .env
