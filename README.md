@@ -17,7 +17,7 @@ However, everyone actively contributed to all components throughout the developm
 This project helped us apply the skills we learnt during previous courses, such as Object-Oriented Programming, SQL, and JavaScript. It allowed us to learn more about working in software development teams. It was a fun, practical, and creative way to deepen our knowledge of how real-world applications are built. 
 
 
-### 🚀 Instructions
+### ✨ Features
 
 Our lovely Barbie Bank customers can log in using their iconic BarbieCard and entering their PIN code. Once authenticated they will be able to:
 💰 Check account balances
@@ -27,9 +27,6 @@ Our lovely Barbie Bank customers can log in using their iconic BarbieCard and en
 🔄 Transfer funds between accounts
 
 The frontend application was created using Qt Creator (C++), and it connects to a Node.js backend and a MySQL database through a REST API. The system requires the backend server to be running, and users must log in with a valid card to access their data. 
-
-
-### ✨ Features
 
 ✅ Credit and Debit in One Card - One BarbieCard grants access to both a credit and a debit account.
 
@@ -50,6 +47,9 @@ Architecture: REST API
 
 ## ER-diagram
 ![ER-diagram](ER_diagram_14_3.png)
+
+.## Tilakavio
+![Tilakaavio](tilakaavio.png) 
 
 ### 👨‍💻 Developers
 
