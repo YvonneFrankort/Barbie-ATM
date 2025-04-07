@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/new/BARBIE">
+        <file>ATM.png</file>
+        <file>BarbieAtmPic.png</file>
+    </qresource>
+</RCC>

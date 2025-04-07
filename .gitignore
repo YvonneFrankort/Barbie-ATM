@@ -2,5 +2,6 @@ backend/node_modules/
 pankkiautomaatti/build/
 pankkiautomaatti/RFID_DLL/build
 pankkiautomaatti/*.user
+/.vscode
 
 .env
