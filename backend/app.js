@@ -12,9 +12,13 @@ var accountRouter = require('./routes/account');
 var cardaccountRouter = require('./routes/cardaccount');
 var cardRouter = require('./routes/card');
 var transactionRouter = require('./routes/transaction');
+var depositRouter = require('./routes/deposit');
+var balanceRouter = require('./routes/balance');
+var withdrawRouter = require('./routes/withdraw');
 
 var loginRouter = require('./routes/login');
 var jwt = require('jsonwebtoken');
+const deposit = require("./models/deposit_model");
 
 var app = express();
 
@@ -35,6 +39,9 @@ app.use('/account', accountRouter);
 app.use('/cardaccount', cardaccountRouter);
 app.use('/card', cardRouter);
 app.use('/transaction', transactionRouter);
+app.use('/deposit', depositRouter);
+app.use('/balance', balanceRouter);
+app.use('/withdraw', withdrawRouter);
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
@@ -54,11 +61,13 @@ function authenticateToken(req, res, next) {
   }
 
 
-const PORT = process.env.PORT || 3000;
+//jos tämä käytössä käynnistys komennolalla node app.js tai nodemon app.js
+/*
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
 
-
+*/
 
 module.exports = app;

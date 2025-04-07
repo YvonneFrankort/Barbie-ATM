@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 8.0.31, for macos12 (x86_64)
+-- MySQL dump 10.13  Distrib 8.2.0, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: bank_14_3
+-- Host: localhost    Database: bank_14_3
 -- ------------------------------------------------------
--- Server version	8.0.31
+-- Server version	8.2.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -40,7 +40,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,1,1000.00,'credit',300.00),(2,1,100.00,'credit',NULL),(3,2,3000.00,'credit',500.00),(4,2,200.00,'credit',30.00),(5,3,100.00,'credit',125.00),(6,3,10000.00,'debit',NULL);
+INSERT INTO `account` VALUES (1,1,1150.00,'credit',300.00),(2,1,100.00,'credit',NULL),(3,2,3000.00,'credit',500.00),(4,2,200.00,'credit',30.00),(5,3,100.00,'credit',125.00),(6,3,10000.00,'debit',NULL);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -68,7 +68,7 @@ CREATE TABLE `card` (
 
 LOCK TABLES `card` WRITE;
 /*!40000 ALTER TABLE `card` DISABLE KEYS */;
-INSERT INTO `card` VALUES (1,'1234',1,'1234'),(2,'2222',1,'0000'),(3,'3333',2,'3333'),(4,'4444',2,'4444'),(5,'5555',3,'5555'),(6,'6666',3,'3333');
+INSERT INTO `card` VALUES (1,'$2b$10$EIIshfrqCv8RUY1xXeoWvOcck3cSeGKnaF6LP67ytO9s89jFAb3WS',1,'06000DE3C0'),(2,'$2b$10$rw1dl5Q6rr.WeDjoMkqoke/e2cg8YzMv/z4cTw84BoAzRdnTvt/2e',1,'060006221F'),(3,'3333',2,'3333'),(4,'4444',2,'4444'),(5,'5555',3,'5555'),(6,'6666',3,'3333');
 /*!40000 ALTER TABLE `card` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -164,4 +164,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-16 19:08:47
+-- Dump completed on 2025-04-01  9:16:21

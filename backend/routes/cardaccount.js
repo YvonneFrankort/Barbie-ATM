@@ -4,6 +4,7 @@ const cardaccount = require('../models/cardaccount_model');
 
 // Get all card-account links
 router.get('/', function (request, response) {
+    console.log("NÄETKÖ MINUT??")
     cardaccount.getAll(function (err, result) {
         if (err) {
             response.status(500).json(err);
@@ -14,7 +15,8 @@ router.get('/', function (request, response) {
 });
 
 // Get accounts linked to a specific card
-router.get('/card/:card_id', function (request, response) {
+router.get('/:card_id?', function (request, response) {
+    console.log("NÄETKÖ MINUT??")
     cardaccount.getByCardId(request.params.card_id, function (err, result) {
         if (err) {
             response.status(500).json(err);
@@ -25,7 +27,7 @@ router.get('/card/:card_id', function (request, response) {
 });
 
 // Get cards linked to a specific account
-router.get('/account/:account_id', function (request, response) {
+router.get('/cardaccount/:account_id', function (request, response) {
     cardaccount.getByAccountId(request.params.account_id, function (err, result) {
         if (err) {
             response.status(500).json(err);

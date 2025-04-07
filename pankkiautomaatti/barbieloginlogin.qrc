@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/new/barbie">
+        <file>ATM.png</file>
+        <file>Welcome back barbie (1).png</file>
+    </qresource>
+    <qresource prefix="/barbieSONG">
+        <file>barbieSONG.mp3</file>
+    </qresource>
+</RCC>
