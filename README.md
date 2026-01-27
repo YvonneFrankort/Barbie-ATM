@@ -7,10 +7,10 @@ A Software Development Application Project
 Barbie ATM is a fully functioning, Barbie‑themed automated teller machine that allows users to manage their bank accounts in a fun and colorful way. While the design is playful, the system itself is a serious software project integrating a Qt frontend, Node.js  backend, MySQL database, and RFID authentication.
 
 The project was developed by a team of four. Each member initially focused on one component: 
-🌸 Frontend Application (Qt)
-🔧 Node.js API (REST backend)
-🗄️ MySQL Database
-🔄 Node.js Interface (API integration with the database)
+* 🌸 Frontend Application (Qt)
+* 🔧 Node.js API (REST backend)
+* 🗄️ MySQL Database
+* 🔄 Node.js Interface (API integration with the database)
 
 Throughout development, everyone contributed across components to strengthen collaboration and deepen full‑stack understanding. The project allowed us to apply skills from Object‑Oriented Programming, SQL, JavaScript, and team‑based software development. 
 
@@ -18,11 +18,11 @@ Throughout development, everyone contributed across components to strengthen col
 ### ✨ Features
 
 Users log in with their BarbieCard (RFID) and PIN. After authentication, they can:
-💰 Check account balances
-📜 View transaction history
-➕ Make deposits
-➖ Withdraw money
-🔄 Transfer funds between accounts
+* 💰 Check account balances
+* 📜 View transaction history
+* ➕ Make deposits
+* ➖ Withdraw money
+* 🔄 Transfer funds between accounts
 
 Additional implemented features:
 * **Credit + Debit in one card**
@@ -43,25 +43,24 @@ The Qt frontend communicates with the Node.js  backend via a REST API, which han
 
 ### 📸 Gallery
 
-## Login Interface
+#### Login Interface
 Shows card number input, PIN entry, and attempt counter.
 
-![Login Interface](ADD-YOUR-IMAGE-LINK)
+<img width="350" height="535" alt="welcome" src="https://github.com/user-attachments/assets/5b01cc15-511e-4e8b-8b59-79d7f3513bfd" />
 
 
-### Main Menu (Logged In) Options for balance, transactions, deposit, withdraw, transfer, and logout. 
+#### Main Menu (Logged In) 
+Options for balance, transactions, deposit, withdraw, transfer, and logout. 
 
-![Main Menu](ADD-YOUR-IMAGE-LINK) 
+<img width="235" height="224" alt="logged_in_view" src="https://github.com/user-attachments/assets/a63b2c76-3b69-4d87-bfe0-3fcecac09d76" />
+ 
+
+#### Transaction History Demonstrates working backend + database communication. 
+A popup window showing the user’s last 10 transactions. Demonstrates correct backend + database communication.
+
+<img width="250" height="453" alt="transaction_history" src="https://github.com/user-attachments/assets/fa889c20-777d-4fa7-b031-d93ab85329f0" />
 
 
-### Balance Display Popup showing the user’s current balance. 
-
-![Balance Display](ADD-YOUR-IMAGE-LINK) 
-
-
-### Transaction History Demonstrates working backend + database communication. 
-
-![Transaction History](ADD-YOUR-IMAGE-LINK) 
 
 
 ## ER-diagram
