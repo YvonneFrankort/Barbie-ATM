@@ -52,7 +52,7 @@ Shows card number input, PIN entry, and attempt counter.
 #### Main Menu (Logged In) 
 Options for balance, transactions, deposit, withdraw, transfer, and logout. 
 
-<img width="235" height="224" alt="logged_in_view" src="https://github.com/user-attachments/assets/a63b2c76-3b69-4d87-bfe0-3fcecac09d76" />
+<img width="300" height="224" alt="logged_in_view" src="https://github.com/user-attachments/assets/a63b2c76-3b69-4d87-bfe0-3fcecac09d76" />
  
 
 #### Transaction History Demonstrates working backend + database communication. 
