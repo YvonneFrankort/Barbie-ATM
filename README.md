@@ -1,55 +1,76 @@
-# Group_2
-
 ## **💖 Barbie ATM**
+
+A Software Development Application Project
 
 ### 📖 Description
 
-Our project is called Barbie ATM - a fabulous, Barbie-themed bank ATM. With it, customers can manage their card-linked bank accounts in style. The product is specially designed for young women, who are tired of the dull, gray bank machines and are looking for a more joyful, personalized experience — but of course, it’s made for everyone who loves a bit of fun, color, and the magic of Barbie. After all, who doesn’t enjoy a touch of fabulous? 💖
+Barbie ATM is a fully functioning, Barbie‑themed automated teller machine that allows users to manage their bank accounts in a fun and colorful way. While the design is playful, the system itself is a serious software project integrating a Qt frontend, Node.js  backend, MySQL database, and RFID authentication.
 
-We built this project as a team of four, with each member initially responsible for one component: 
+The project was developed by a team of four. Each member initially focused on one component: 
 🌸 Frontend Application (Qt)
 🔧 Node.js API (REST backend)
 🗄️ MySQL Database
 🔄 Node.js Interface (API integration with the database)
 
-However, everyone actively contributed to all components throughout the development process to enhance collaboration, learning and efficiency.
-
-This project helped us apply the skills we learnt during previous courses, such as Object-Oriented Programming, SQL, and JavaScript. It allowed us to learn more about working in software development teams. It was a fun, practical, and creative way to deepen our knowledge of how real-world applications are built. 
+Throughout development, everyone contributed across components to strengthen collaboration and deepen full‑stack understanding. The project allowed us to apply skills from Object‑Oriented Programming, SQL, JavaScript, and team‑based software development. 
 
 
 ### ✨ Features
 
-Our lovely Barbie Bank customers can log in using their iconic BarbieCard and entering their PIN code. Once authenticated they will be able to:
+Users log in with their BarbieCard (RFID) and PIN. After authentication, they can:
 💰 Check account balances
 📜 View transaction history
 ➕ Make deposits
 ➖ Withdraw money
 🔄 Transfer funds between accounts
 
-The frontend application was created using Qt Creator (C++), and it connects to a Node.js backend and a MySQL database through a REST API. The system requires the backend server to be running, and users must log in with a valid card to access their data. 
+Additional implemented features:
+* **Credit + Debit in one card**
+* **Multiple credit card type**s (Premium, Platinum, Gold) with different limits
+* **Savings account** earning 2% annual interest for 5 years (locked during the period)
+  
+The Qt frontend communicates with the Node.js  backend via a REST API, which handles all database operations.
 
-✅ Credit and Debit in One Card - One BarbieCard grants access to both a credit and a debit account.
 
-✅ Multiple Credit Card Types - Includes Premium, Platinum and Gold cards, each with different credit limits. 
+### 🛠 Technologies
 
-⏳ Savings Account -  Earns 2 % interest annually for 5 years. The account is locked during this time, and withdrawals are not allowed. 
-
-
-### 🛠 Technology
-
-Frontend: C++ with Qt Framework
-Backend: JavaScript (Node.js, Express)
-Database: MySQL
-Architecture: REST API
+* **Frontend:** C++ with Qt Framework
+* **Backend:** Node.js, Express
+* **Database:** MySQL
+* **Architecture:** REST API
+* **Tools:** Postman, GitHub, RFID DLL
 
 
 ### 📸 Gallery
 
-## ER-diagram
-![ER-diagram](ER_diagram_14_3.png)
+## Login Interface
+Shows card number input, PIN entry, and attempt counter.
 
-.## Tilakavio
-![Tilakaavio](tilakaavio.png) 
+![Login Interface](ADD-YOUR-IMAGE-LINK)
+
+
+### Main Menu (Logged In) Options for balance, transactions, deposit, withdraw, transfer, and logout. 
+
+![Main Menu](ADD-YOUR-IMAGE-LINK) 
+
+
+### Balance Display Popup showing the user’s current balance. 
+
+![Balance Display](ADD-YOUR-IMAGE-LINK) 
+
+
+### Transaction History Demonstrates working backend + database communication. 
+
+![Transaction History](ADD-YOUR-IMAGE-LINK) 
+
+
+## ER-diagram
+![ER-diagram of the database structure](ER_diagram_14_3.png)
+
+
+### Documentation
+
+A full project report (PDF) is available, including architecture diagrams, methods, results, and conclusions.
 
 ### 👨‍💻 Developers
 
