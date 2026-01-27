@@ -56,20 +56,22 @@ Options for balance, transactions, deposit, withdraw, transfer, and logout.
  
 
 #### Transaction History Demonstrates working backend + database communication. 
-A popup window showing the user’s last 10 transactions. Demonstrates correct backend + database communication.
+A popup window showing the user’s last 10 transactions. Demonstrates correct backend + database communication
 
 <img width="250" height="453" alt="transaction_history" src="https://github.com/user-attachments/assets/fa889c20-777d-4fa7-b031-d93ab85329f0" />
 
 
-
-
-## ER-diagram
+### ER-diagram
 ![ER-diagram of the database structure](ER_diagram_14_3.png)
 
 
-### Documentation
+## 📋Documentation
 
 A full project report (PDF) is available, including architecture diagrams, methods, results, and conclusions.
+
+[Download the full report](./Barbie_ATM_Project_Report.pdf)
+
+---
 
 ### 👨‍💻 Developers
 
