@@ -83,6 +83,11 @@ Pilar Murcia Pozuelo - https://github.com/tecnopistacho
 
 Yvonne Frankort - https://github.com/YvonneFrankort
 
+
+## 👥 My Contribution
+
+I contributed primarily to backend development, focusing on Node.js API endpoints and MySQL database integration. I also supported system-level functionality and worked on integrating frontend and backend components within the team.
+
 ### 📄 License
 
 Barbie ATM - Group 2, 2025
